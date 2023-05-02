@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useParams } from 'react-router-dom';
 
 import blue from '../images/blue-candy.png';
 import green from '../images/green-candy.png';
@@ -19,11 +20,72 @@ const candyColors = [
   green
 ]
 
+const LEVELS = [
+      {id: 1, name: 'Level 1', unlockedScore: 0},
+      {id: 2, name: 'Level 2', unlockedScore: 1000},
+      {id: 3, name: 'Level 3', unlockedScore: 2000},
+      {id: 4, name: 'Level 4', unlockedScore: 3000},
+      {id: 5, name: 'Level 5', unlockedScore: 4000},
+      {id: 6, name: 'Level 6', unlockedScore: 5000},
+      {id: 7, name: 'Level 7', unlockedScore: 6000},
+      {id: 8, name: 'Level 8', unlockedScore: 7000},
+      {id: 9, name: 'Level 9', unlockedScore: 8000},
+      {id: 10, name: 'Level 10', unlockedScore: 9000},
+]
+
 const LevelPage = () => {
+      const { id } = useParams([]);
+      const level = LEVELS.find((l) => l.id === parseInt(id));
+      const nextLevel = LEVELS.find((l) => l.id === parseInt(id) + 1);
+
+      const [timeLeft, setTimeLeft] = useState(60);
+      const [result, setResult] = useState(null);
       const [currentColor, setCurrentColor] = useState([]);
       const [squareDragged, setSquareDragged] = useState(null);
       const [squareReplaced, setSquareReplaced] = useState(null);
       const [scoreDisplay, setScoreDisplay] = useState(0);
+      const [lives, setLives] = useState(3);
+      const [unlockedLevels, setUnlockedLevels] = useState([1]);
+
+      useEffect(() => {
+            if (scoreDisplay >= LEVELS.unlockedScore && !unlockedLevels.includes(nextLevel.id)) {
+              setUnlockedLevels((prevLevels) => [...prevLevels, nextLevel.id]);
+            }
+      }, [scoreDisplay]);
+
+      //check for when the time ends
+      useEffect(() => {
+            if(timeLeft === 0 && lives >= 1){
+                  if(scoreDisplay >= 1000){
+                        setResult('You won');
+                        // setUnlockedLevels(unlockedLevels.push(2));
+                  } else {
+                        setResult('You lost');
+                        setLives(lives-1);
+                  }
+            }
+      }, [timeLeft, scoreDisplay]);
+
+      //countdown
+      useEffect(() => {
+            const interval = setInterval(() => {
+                  if(timeLeft > 0){
+                        setTimeLeft(timeLeft - 1);
+                  } else {
+                        clearInterval(interval);
+                  }
+            }, 1000);
+
+            return () => clearInterval(interval);
+      }, [timeLeft]);
+
+      //for reseting score and time
+      const tryAgain = () => {
+            setScoreDisplay(0);
+            setTimeLeft(60);
+            setResult(0);
+            createBoard();
+      }
 
       //checks for a column of four squares with the same color
       const checkForColumnOfFour = () => {
@@ -38,9 +100,9 @@ const LevelPage = () => {
                         return true
                   }
             }
-    }
+      }
   
-    //checks for a row of four squares with the same color
+      //checks for a row of four squares with the same color
       const checkForRowOfFour = () => {
             for (let i = 0; i < 64; i++) {
                   const rowOfFour = [i, i + 1, i + 2, i + 3]
@@ -108,7 +170,8 @@ const LevelPage = () => {
                   }
             }
       }
-  
+      
+      //functions to handle the dragging of the elements
       const dragStart = (e) => {
             setSquareDragged(e.target)
       }
@@ -148,7 +211,7 @@ const LevelPage = () => {
             }
       }
   
-  
+      //creating the board
       const createBoard = () => {
             const randomColorArrangement = []
             for (let i = 0; i < width * width; i++) {
@@ -195,7 +258,7 @@ const LevelPage = () => {
                               />
                         ))}
                   </div>
-            <ScoreBoard score={scoreDisplay}/>
+            <ScoreBoard score={scoreDisplay} timeLeft={timeLeft} result={result} playAgain={tryAgain} lives={lives}/>
         </div>
       )
 }

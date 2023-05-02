@@ -1,19 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
 const LEVELS = [
-      {id: 1, name: 'Level 1'},
-      {id: 2, name: 'Level 2'},
-      {id: 3, name: 'Level 3'},
-      {id: 4, name: 'Level 4'},
-      {id: 5, name: 'Level 5'},
-      {id: 6, name: 'Level 6'},
+      {id: 1, name: 'Level 1', unlockedScore: 0},
+      {id: 2, name: 'Level 2', unlockedScore: 1000},
+      {id: 3, name: 'Level 3', unlockedScore: 2000},
+      {id: 4, name: 'Level 4', unlockedScore: 3000},
+      {id: 5, name: 'Level 5', unlockedScore: 4000},
+      {id: 6, name: 'Level 6', unlockedScore: 5000},
+      {id: 7, name: 'Level 7', unlockedScore: 6000},
+      {id: 8, name: 'Level 8', unlockedScore: 7000},
+      {id: 9, name: 'Level 9', unlockedScore: 8000},
+      {id: 10, name: 'Level 10', unlockedScore: 9000},
 ]
+const LandingPage = ({unlockedLevels, setUnlockedLevels, scoreDisplay, nextLevel}) => {
+      unlockedLevels = [1];
 
-const LandingPage = () => {
-      //at first, only level 1 is unlocked
-      const [unlockedLevels, setUnlockedLevels] = useState([1]);
-
+      useEffect(() => {
+            if (scoreDisplay >= LEVELS.unlockedScore && !unlockedLevels.includes(nextLevel.id)) {
+              setUnlockedLevels((prevLevels) => [...prevLevels, nextLevel.id]);
+            }
+      }, [scoreDisplay]);
+      
       return (
             <div className='h-screen bg-center bg-cover' style={{backgroundImage: "url('/bg-image.png')"}}>
                   <div className='flex flex-col items-center justify-center h-full bg-gray-900 bg-opacity-50'>
