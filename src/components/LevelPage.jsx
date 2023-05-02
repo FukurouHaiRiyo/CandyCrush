@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import { redirect, useParams } from 'react-router-dom';
 
 import blue from '../images/blue-candy.png';
 import green from '../images/green-candy.png';
@@ -47,18 +47,17 @@ const LevelPage = () => {
       const [lives, setLives] = useState(3);
       const [unlockedLevels, setUnlockedLevels] = useState([1]);
 
-      useEffect(() => {
+      const Level = () => {
             if (scoreDisplay >= LEVELS.unlockedScore && !unlockedLevels.includes(nextLevel.id)) {
-              setUnlockedLevels((prevLevels) => [...prevLevels, nextLevel.id]);
+                  setUnlockedLevels((prevLevels) => [...prevLevels, nextLevel.id]);
             }
-      }, [scoreDisplay]);
-
+      }
       //check for when the time ends
       useEffect(() => {
             if(timeLeft === 0 && lives >= 1){
                   if(scoreDisplay >= 1000){
                         setResult('You won');
-                        // setUnlockedLevels(unlockedLevels.push(2));
+                        Level();
                   } else {
                         setResult('You lost');
                         setLives(lives-1);
@@ -69,6 +68,7 @@ const LevelPage = () => {
       //countdown
       useEffect(() => {
             const interval = setInterval(() => {
+                  const pause = true;
                   if(timeLeft > 0){
                         setTimeLeft(timeLeft - 1);
                   } else {
@@ -84,11 +84,14 @@ const LevelPage = () => {
             setScoreDisplay(0);
             setTimeLeft(60);
             setResult(0);
+            if(lives <= 0){
+                  setLives(3);
+            }
             createBoard();
       }
 
       //checks for a column of four squares with the same color
-      const checkForColumnOfFour = () => {
+      const checkColumnOfFour = () => {
             for (let i = 0; i <= 39; i++) {
                   const columnOfFour = [i, i + width, i + width * 2, i + width * 3]
                   const decidedColor = currentColor[i]
@@ -103,7 +106,7 @@ const LevelPage = () => {
       }
   
       //checks for a row of four squares with the same color
-      const checkForRowOfFour = () => {
+      const checkRowOfFour = () => {
             for (let i = 0; i < 64; i++) {
                   const rowOfFour = [i, i + 1, i + 2, i + 3]
                   const decidedColor = currentColor[i]
@@ -121,7 +124,7 @@ const LevelPage = () => {
       }
   
     //checks for a column of 3 squares with the same color
-    const checkForColumnOfThree = () => {
+    const checkColumnOfThree = () => {
       for (let i = 0; i <= 47; i++) {
             const columnOfThree = [i, i + width, i + width * 2]
             const decidedColor = currentColor[i]
@@ -136,7 +139,7 @@ const LevelPage = () => {
     }
   
     //checks for a row of 3 squares with the same color
-    const checkForRowOfThree = () => {
+    const checkRowOfThree = () => {
       for (let i = 0; i < 64; i++) {
             const rowOfThree = [i, i + 1, i + 2]
             const decidedColor = currentColor[i]
@@ -154,7 +157,7 @@ const LevelPage = () => {
       }
   
       //function to fill the empty spaces
-      const moveIntoSquareBelow = () => {
+      const moveInEmptySpaces = () => {
             for (let i = 0; i <= 55; i++) {
                   const firstRow = [0, 1, 2, 3, 4, 5, 6, 7]
                   const isFirstRow = firstRow.includes(i)
@@ -196,10 +199,10 @@ const LevelPage = () => {
       
             const validMove = validMoves.includes(squareBeingReplacedId)
       
-            const isAColumnOfFour = checkForColumnOfFour()
-            const isARowOfFour = checkForRowOfFour()
-            const isAColumnOfThree = checkForColumnOfThree()
-            const isARowOfThree = checkForRowOfThree()
+            const isAColumnOfFour = checkColumnOfFour()
+            const isARowOfFour = checkRowOfFour()
+            const isAColumnOfThree = checkColumnOfThree()
+            const isARowOfThree = checkRowOfThree()
       
             if (squareBeingReplacedId && validMove && (isARowOfThree || isARowOfFour || isAColumnOfFour || isAColumnOfThree)) {
                   setSquareDragged(null)
@@ -227,15 +230,15 @@ const LevelPage = () => {
   
     useEffect(() => {
         const timer = setInterval(() => {
-            checkForColumnOfFour()
-            checkForRowOfFour()
-            checkForColumnOfThree()
-            checkForRowOfThree()
-            moveIntoSquareBelow()
+            checkColumnOfFour()
+            checkRowOfFour()
+            checkColumnOfThree()
+            checkRowOfThree()
+            moveInEmptySpaces()
             setCurrentColor([...currentColor])
         }, 100)
         return () => clearInterval(timer)
-    }, [checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow, currentColor])
+    }, [checkColumnOfFour, checkRowOfFour, checkColumnOfThree, checkRowOfThree, moveInEmptySpaces, currentColor])
   
 
 

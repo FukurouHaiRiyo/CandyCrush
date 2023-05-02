@@ -15,12 +15,6 @@ const LEVELS = [
 ]
 const LandingPage = ({unlockedLevels, setUnlockedLevels, scoreDisplay, nextLevel}) => {
       unlockedLevels = [1];
-
-      useEffect(() => {
-            if (scoreDisplay >= LEVELS.unlockedScore && !unlockedLevels.includes(nextLevel.id)) {
-              setUnlockedLevels((prevLevels) => [...prevLevels, nextLevel.id]);
-            }
-      }, [scoreDisplay]);
       
       return (
             <div className='h-screen bg-center bg-cover' style={{backgroundImage: "url('/bg-image.png')"}}>
