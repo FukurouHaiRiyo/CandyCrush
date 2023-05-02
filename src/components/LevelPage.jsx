@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import blue from '../images/blue-candy.png';
 import green from '../images/green-candy.png';

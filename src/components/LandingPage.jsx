@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import bg_image from '../images/bg_image.png';
 
 const LEVELS = [
       {id: 1, name: 'Level 1', unlockedScore: 0},
@@ -13,11 +14,11 @@ const LEVELS = [
       {id: 9, name: 'Level 9', unlockedScore: 8000},
       {id: 10, name: 'Level 10', unlockedScore: 9000},
 ]
-const LandingPage = ({unlockedLevels, setUnlockedLevels, scoreDisplay, nextLevel}) => {
+const LandingPage = ({unlockedLevels}) => {
       unlockedLevels = [1];
       
       return (
-            <div className='h-screen bg-center bg-cover' style={{backgroundImage: "url('/bg-image.png')"}}>
+            <div className='h-screen bg-center bg-cover' style={{backgroundImage: `url(${bg_image})`}}>
                   <div className='flex flex-col items-center justify-center h-full bg-gray-900 bg-opacity-50'>
                         <h1 className='text-4xl font-bold mb-8'>Candy Crush Remake</h1>
 
