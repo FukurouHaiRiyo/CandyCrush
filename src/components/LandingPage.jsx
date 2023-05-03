@@ -22,7 +22,7 @@ const LandingPage = ({score}) => {
                                                       className={`w-full rounded-lg p-4 text-lg font-bold ${
                                                             index <= unlockedLevels
                                                             ? 'bg-green-500 hover:bg-green-600 text-white'
-                                                            : 'bg-gray-500 cursor-not-allowed text-gray-300'
+                                                            : 'bg-gray-500 text-gray-300'
                                                       }`}
                                                 >
                                                       {level}
