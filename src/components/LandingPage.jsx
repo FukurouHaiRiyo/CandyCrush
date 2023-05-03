@@ -23,7 +23,7 @@ const LandingPage = ({unlockedLevels}) => {
                         <h1 className='text-4xl font-bold mb-8'>Candy Crush Remake</h1>
 
                         <p className='text-lg mb-2'>Select your level to start: </p>
-                        <ul className='grid grid-cols-3 gap-4'>
+                        <ul className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                               {LEVELS.map((level) => (
                                     <li key={level.id}>
                                           <Link to={`/level/${level.id}`}>

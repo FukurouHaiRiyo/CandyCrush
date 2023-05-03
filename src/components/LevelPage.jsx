@@ -243,8 +243,8 @@ const LevelPage = () => {
 
 
       return (
-            <div className="app">
-                  <div className="game">
+            <div className='app bg-gray-50 flex flex-col justify-center items-center min-h-screen'>
+                  <div className='game flex flex-wrap justify-center'>
                         {currentColor.map((candyColor, index) => (
                               <img
                                     key={index}
