@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import blue from '../images/blue-candy.png';
 import green from '../images/green-candy.png';
@@ -37,33 +37,30 @@ const LevelPage = () => {
       const { id } = useParams([]);
       const level = LEVELS.find((l) => l.id === parseInt(id));
       const nextLevel = LEVELS.find((l) => l.id === parseInt(id) + 1);
+      const navigate = useNavigate();
 
       const [timeLeft, setTimeLeft] = useState(60);
       const [result, setResult] = useState(null);
       const [currentColor, setCurrentColor] = useState([]);
       const [squareDragged, setSquareDragged] = useState(null);
       const [squareReplaced, setSquareReplaced] = useState(null);
-      const [scoreDisplay, setScoreDisplay] = useState(0);
+      const [scoreDisplay, setScoreDisplay] = useState(30);
       const [lives, setLives] = useState(3);
       const [unlockedLevels, setUnlockedLevels] = useState([1]);
-
-      const Level = () => {
-            if (scoreDisplay >= LEVELS.unlockedScore && !unlockedLevels.includes(nextLevel.id)) {
-                  setUnlockedLevels((prevLevels) => [...prevLevels, nextLevel.id]);
-            }
-      }
+      
       //check for when the time ends
       useEffect(() => {
             if(timeLeft === 0 && lives >= 1){
                   if(scoreDisplay >= 1000){
-                        setResult('You won');
-                        Level();
+                        setResult(result);
+                        navigate(`/landing-page?score=${scoreDisplay}`);
+                        console.log(scoreDisplay)
                   } else {
                         setResult('You lost');
                         setLives(lives-1);
                   }
             }
-      }, [timeLeft, scoreDisplay]);
+      }, [timeLeft, scoreDisplay, lives]);
 
       //countdown
       useEffect(() => {
