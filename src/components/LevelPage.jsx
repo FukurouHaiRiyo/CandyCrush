@@ -10,7 +10,8 @@ import yellow from '../images/yellow-candy.png';
 import blank from '../images/blank.png';
 import ScoreBoard from './ScoreBoard';
 
-const width = 8
+const width = 7
+const height = 9
 const candyColors = [
   blue,
   orange,
@@ -53,7 +54,7 @@ const LevelPage = () => {
             if(timeLeft === 0 && lives >= 1){
                   if(scoreDisplay >= 1000){
                         setResult(result);
-                        navigate(`/landing-page?score=${scoreDisplay}`);
+                        navigate(`/`);
                         console.log(scoreDisplay)
                   } else {
                         setResult('You lost');
@@ -89,74 +90,84 @@ const LevelPage = () => {
 
       //checks for a column of four squares with the same color
       const checkColumnOfFour = () => {
-            for (let i = 0; i <= 39; i++) {
-                  const columnOfFour = [i, i + width, i + width * 2, i + width * 3]
-                  const decidedColor = currentColor[i]
-                  const isBlank = currentColor[i] === blank
+            for (let i = 0; i <= width * (height - 4); i++) {
+                  const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
+                  const decidedColor = currentColor[i];
+                  const isBlank = currentColor[i] === blank;
             
-                  if (columnOfFour.every(square => currentColor[square] === decidedColor && !isBlank)) {
-                        setScoreDisplay((score) => score + 40)
-                        columnOfFour.forEach(square => currentColor[square] = blank)
-                        return true
+                  if (
+                    columnOfFour.every(
+                      square => currentColor[square] === decidedColor && !isBlank
+                    )
+                  ) {
+                    setScoreDisplay(score => score + 40);
+                    columnOfFour.forEach(square => (currentColor[square] = blank));
+                    return true;
                   }
             }
       }
   
       //checks for a row of four squares with the same color
       const checkRowOfFour = () => {
-            for (let i = 0; i < 64; i++) {
-                  const rowOfFour = [i, i + 1, i + 2, i + 3]
-                  const decidedColor = currentColor[i]
-                  const notValid = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64]
-                  const isBlank = currentColor[i] === blank
-      
-            if (notValid.includes(i)) continue
-      
-            if (rowOfFour.every(square => currentColor[square] === decidedColor && !isBlank)) {
-                        setScoreDisplay((score) => score + 40)
-                        rowOfFour.forEach(square => currentColor[square] = blank)
-                        return true
+            for (let i = 0; i < width * height; i++) {
+                  const rowOfFour = [i, i + 1, i + 2, i + 3];
+                  const decidedColor = currentColor[i];
+                  const isBlank = currentColor[i] === blank;
+              
+                  if (
+                    rowOfFour.every(
+                      square => currentColor[square] === decidedColor && !isBlank
+                    )
+                  ) {
+                    setScoreDisplay(score => score + 40);
+                    rowOfFour.forEach(square => (currentColor[square] = blank));
+                    return true;
                   }
             }
       }
   
     //checks for a column of 3 squares with the same color
     const checkColumnOfThree = () => {
-      for (let i = 0; i <= 47; i++) {
-            const columnOfThree = [i, i + width, i + width * 2]
-            const decidedColor = currentColor[i]
-            const isBlank = currentColor[i] === blank
-      
-            if (columnOfThree.every(square => currentColor[square] === decidedColor && !isBlank)) {
-                  setScoreDisplay((score) => score + 40)
-                  columnOfThree.forEach(square => currentColor[square] = blank)
-                  return true
+      for (let i = 0; i <= width * (height - 3); i++) {
+            const columnOfThree = [i, i + width, i + width * 2];
+            const decidedColor = currentColor[i];
+            const isBlank = currentColor[i] === blank;
+        
+            if (
+              columnOfThree.every(
+                square => currentColor[square] === decidedColor && !isBlank
+              )
+            ) {
+              setScoreDisplay(score => score + 30);
+              columnOfThree.forEach(square => (currentColor[square] = blank));
+              return true;
             }
       }
     }
   
     //checks for a row of 3 squares with the same color
     const checkRowOfThree = () => {
-      for (let i = 0; i < 64; i++) {
-            const rowOfThree = [i, i + 1, i + 2]
-            const decidedColor = currentColor[i]
-            const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 63, 64]
-            const isBlank = currentColor[i] === blank
-      
-            if (notValid.includes(i)) continue
-      
-            if (rowOfThree.every(square => currentColor[square] === decidedColor && !isBlank)) {
-                        setScoreDisplay((score) => score + 40)
-                        rowOfThree.forEach(square => currentColor[square] = blank)
-                        return true
-                  }
+      for (let i = 0; i < width * height; i++) {
+            const rowOfThree = [i, i + 1, i + 2];
+            const decidedColor = currentColor[i];
+            const isBlank = currentColor[i] === blank;
+        
+            if (
+              rowOfThree.every(
+                square => currentColor[square] === decidedColor && !isBlank
+              )
+            ) {
+              setScoreDisplay(score => score + 30);
+              rowOfThree.forEach(square => (currentColor[square] = blank));
+              return true;
             }
+      }
       }
   
       //function to fill the empty spaces
       const moveInEmptySpaces = () => {
             for (let i = 0; i <= 55; i++) {
-                  const firstRow = [0, 1, 2, 3, 4, 5, 6, 7]
+                  const firstRow = [0, 1, 2, 3, 4, 5, 6, 7, 8]
                   const isFirstRow = firstRow.includes(i)
             
                   if (isFirstRow && currentColor[i] === blank) {
@@ -183,43 +194,53 @@ const LevelPage = () => {
       const dragEnd = () => {
             const squareBeingDraggedId = parseInt(squareDragged.getAttribute('data-id'))
             const squareBeingReplacedId = parseInt(squareReplaced.getAttribute('data-id'))
-      
+          
             currentColor[squareBeingReplacedId] = squareDragged.getAttribute('src')
             currentColor[squareBeingDraggedId] = squareReplaced.getAttribute('src')
-      
-            const validMoves = [
-            squareBeingDraggedId - 1,
-            squareBeingDraggedId - width,
-            squareBeingDraggedId + 1,
-            squareBeingDraggedId + width
-            ]
-      
+          
+            const validMoves = [    squareBeingDraggedId - 1,    squareBeingDraggedId - width,    squareBeingDraggedId - height,    squareBeingDraggedId + 1,    squareBeingDraggedId + width,    squareBeingDraggedId + height,  ]
+          
             const validMove = validMoves.includes(squareBeingReplacedId)
-      
+          
             const isAColumnOfFour = checkColumnOfFour()
             const isARowOfFour = checkRowOfFour()
             const isAColumnOfThree = checkColumnOfThree()
             const isARowOfThree = checkRowOfThree()
-      
+          
             if (squareBeingReplacedId && validMove && (isARowOfThree || isARowOfFour || isAColumnOfFour || isAColumnOfThree)) {
-                  setSquareDragged(null)
-                  setSquareReplaced(null)
+              setSquareDragged(null)
+              setSquareReplaced(null)
             } else {
-                  currentColor[squareBeingReplacedId] = squareReplaced.getAttribute('src')
-                  currentColor[squareBeingDraggedId] = squareDragged.getAttribute('src')
-                  setCurrentColor([...currentColor])
+              currentColor[squareBeingReplacedId] = squareReplaced.getAttribute('src')
+              currentColor[squareBeingDraggedId] = squareDragged.getAttribute('src')
+          
+              
+              const hasEmptySpaces = moveInEmptySpaces()
+              if (hasEmptySpaces) {
+                setTimeout(() => {
+                  checkRowOfThree()
+                  checkColumnOfThree()
+                  checkRowOfFour()
+                  checkColumnOfFour()
+                }, 300)
+              } else {
+                setCurrentColor([...currentColor])
+              }
             }
-      }
+          }
+          
   
       //creating the board
       const createBoard = () => {
-            const randomColorArrangement = []
-            for (let i = 0; i < width * width; i++) {
-                  const randomColor = candyColors[Math.floor(Math.random() * candyColors.length)]
-                  randomColorArrangement.push(randomColor)
+            const randomColorArrangement = [];
+            for (let i = 0; i < width; i++) {
+                  for(let j = 0; j < height; j++){
+                        const randomColor = candyColors[Math.floor(Math.random() * candyColors.length)];
+                        randomColorArrangement.push(randomColor);
+                  }
+                  setCurrentColor(randomColorArrangement);
             }
-            setCurrentColor(randomColorArrangement)
-      }
+      };
       
     useEffect(() => {
         createBoard()
@@ -240,7 +261,7 @@ const LevelPage = () => {
 
 
       return (
-            <div className='app bg-gray-50 flex flex-col justify-center items-center min-h-screen'>
+            <div className='app bg-gray-50 flex flex-row justify-center items-center min-h-screen'>
                   <div className='game flex flex-wrap justify-center'>
                         {currentColor.map((candyColor, index) => (
                               <img
