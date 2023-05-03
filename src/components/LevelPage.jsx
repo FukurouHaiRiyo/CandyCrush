@@ -260,28 +260,43 @@ const LevelPage = () => {
   
 
 
-      return (
-            <div className='app bg-gray-50 flex flex-row justify-center items-center min-h-screen'>
-                  <div className='game flex flex-wrap justify-center'>
-                        {currentColor.map((candyColor, index) => (
-                              <img
-                                    key={index}
-                                    src={candyColor}
-                                    alt={candyColor}
-                                    data-id={index}
-                                    draggable={true}
-                                    onDragStart={dragStart}
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDragEnter={(e) => e.preventDefault()}
-                                    onDragLeave={(e) => e.preventDefault()}
-                                    onDrop={dragDrop}
-                                    onDragEnd={dragEnd}
-                              />
-                        ))}
-                  </div>
-            <ScoreBoard score={scoreDisplay} timeLeft={timeLeft} result={result} playAgain={tryAgain} lives={lives}/>
-        </div>
-      )
+    return (
+      <div className='app bg-gray-50 flex flex-col justify-center items-center min-h-screen'>
+          <div className='game flex flex-wrap justify-center'>
+              {currentColor.map((candyColor, index) => (
+                  <img
+                      key={index}
+                      src={candyColor}
+                      alt={candyColor}
+                      data-id={index}
+                      draggable={true}
+                      onDragStart={dragStart}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDragEnter={(e) => e.preventDefault()}
+                      onDragLeave={(e) => e.preventDefault()}
+                      onDrop={dragDrop}
+                      onDragEnd={dragEnd}
+                  />
+              ))}
+          </div>
+          <ScoreBoard score={scoreDisplay} timeLeft={timeLeft} result={result} playAgain={tryAgain} lives={lives}/>
+          <style jsx>{`
+              .game {
+                  max-width: 90vw;
+              }
+              
+              @media only screen and (min-width: 768px) {
+                  .app {
+                      flex-direction: row;
+                  }
+                  
+                  .game {
+                      max-width: 50vw;
+                  }
+              }
+          `}</style>
+      </div>
+    )
 }
 
 export default LevelPage;
